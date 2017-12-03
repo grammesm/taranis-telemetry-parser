@@ -8,7 +8,7 @@ import java.io.IOException;
 public class Main {
 
     public static void main(String[] args) {
-        File[] files = new File("c:\\code\\").listFiles(pathname -> {
+        File[] files = new File("telemetry_logs").listFiles(pathname -> {
             if (pathname.getName().endsWith(".csv")) {
                 return true;
             } else {

@@ -1,1 +1,5 @@
 out
+/telemetry_kml_files
+/telemetry_logs/*.csv
+/.idea/uiDesigner.xml
+/.idea/vcs.xml
