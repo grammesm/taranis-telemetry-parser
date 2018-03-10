@@ -79,7 +79,7 @@ public class TelemetryReader {
                         long diff = logDate.getTime() - previousDate.getTime();
                         if (period != 0) {
                             // If the diff is more than 20 ms, assume new session
-                            if (Math.abs(diff - period) > 50) {
+                            if (Math.abs(diff - period) > 1000) {
                                 Log.d(TAG, "New Session? currentIndex: " + currentIndex + " diff: " + diff + ", last diff: " + period);
                                 sessionData.setEndIndex(currentIndex);
                                 sessionDataList.add(new SessionData(sessionData));
@@ -163,6 +163,10 @@ public class TelemetryReader {
             return new GeoPoint(lat, lon, alt);
         } catch (NumberFormatException ne) {
             ne.printStackTrace();
+            return null;
+        } catch (ArrayIndexOutOfBoundsException e) {
+            //e.printStackTrace();
+            Log.d(TAG, "Error parsing coordinate: " + gps);
             return null;
         }
     }

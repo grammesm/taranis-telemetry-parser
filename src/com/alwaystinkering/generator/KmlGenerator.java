@@ -50,36 +50,40 @@ public class KmlGenerator {
 
     public void generateKmlFile(LogData logData, String outputPath) {
 
-        StringBuilder coordinateString = new StringBuilder();
-        for (GeoPoint point : logData.getPath()) {
-            coordinateString.append(point.toString());
-        }
-
-        String kmlOut = String.format(KML_TEMPLATE,
-                // Name postscript
-                " " + logData.getSessionName(),
-                // Look At Coord
-                logData.getPath().get(0).getLon(),
-                logData.getPath().get(0).getLat(),
-                // Path Coords
-                coordinateString.toString());
-
-        File kmlOutputDir = new File(outputPath);
-        kmlOutputDir.mkdirs();
-        File kmlFile = new File(kmlOutputDir.getAbsolutePath() + File.separator + logData.getSessionName() + ".kml");
-
-        try {
-            Log.d(TAG, "Attempting to create: " + kmlFile.getAbsolutePath());
-            if (kmlFile.exists()) {
-                kmlFile.delete();
+        if (logData.getPath().size() > 0) {
+            StringBuilder coordinateString = new StringBuilder();
+            for (GeoPoint point : logData.getPath()) {
+                coordinateString.append(point.toString());
             }
-            kmlFile.createNewFile();
-            BufferedWriter br = new BufferedWriter(new FileWriter(kmlFile));
-            br.write(kmlOut);
-            br.flush();
-            br.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+
+            String kmlOut = String.format(KML_TEMPLATE,
+                    // Name postscript
+                    " " + logData.getSessionName(),
+                    // Look At Coord
+                    logData.getPath().get(0).getLon(),
+                    logData.getPath().get(0).getLat(),
+                    // Path Coords
+                    coordinateString.toString());
+
+            File kmlOutputDir = new File(outputPath);
+            kmlOutputDir.mkdirs();
+            File kmlFile = new File(kmlOutputDir.getAbsolutePath() + File.separator + logData.getSessionName() + ".kml");
+
+            try {
+                Log.d(TAG, "Attempting to create: " + kmlFile.getAbsolutePath());
+                if (kmlFile.exists()) {
+                    kmlFile.delete();
+                }
+                kmlFile.createNewFile();
+                BufferedWriter br = new BufferedWriter(new FileWriter(kmlFile));
+                br.write(kmlOut);
+                br.flush();
+                br.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            Log.d(TAG, "Trying to create kml with no points: " + logData.getSessionName());
         }
     }
 }
